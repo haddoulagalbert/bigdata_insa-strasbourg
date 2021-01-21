@@ -4,7 +4,7 @@ import pandas as pd
 layer = 'image.tif'
 nom = layer[:-4]
 
-ds = gdal.Open(cam)
+ds = gdal.Open(layer)
 
 arr1 = ds.GetRasterBand(1).ReadAsArray()
 arr2 = ds.GetRasterBand(2).ReadAsArray()
