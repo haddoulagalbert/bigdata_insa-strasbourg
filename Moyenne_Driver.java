@@ -23,26 +23,19 @@ public class Driver extends Configured implements Tool{
 
 	}
 
-	@Override
 	public int run(String[] args) throws Exception {
-		// TODO Auto-generated method stub
 		if (args.length != 2) {
 			System.out
 			.printf("Usage: Driver <input dir> <output dir> \n");
 			System.exit(-1);
 		}
-		/*
-		 * Configuration objects
-		 */
 		Configuration conf = new Configuration();
-		//Custom Delimiter
 		conf.set("delimiter", args[2]);
 		
 		Job job = new Job(conf, "Optimizing Mean");
 		job.setJarByClass(Driver.class);
 		FileSystem fs = FileSystem.get(conf);
 
-		//Input and Output paths
 		Path in = new Path(args[0]);
 		Path out = new Path(args[1]);
 		
@@ -50,18 +43,16 @@ public class Driver extends Configured implements Tool{
 		job.setMapOutputValueClass(TwovalueWritable.class);
 		job.setOutputKeyClass(IntWritable.class);
 		job.setOutputValueClass(TwovalueWritable.class);
-		//Mapper and Reducer class
+
 		job.setMapperClass(MeanMapper.class);
 		job.setReducerClass(MeanReducer.class);
 		
 		job.setInputFormatClass(TextInputFormat.class);
 		job.setOutputFormatClass(TextOutputFormat.class);
 
-		//Delete output directory if exist
 		if(fs.exists(out)){
 			fs.delete(out, true);
 		}
-		//Input and output path through command line
 		FileInputFormat.addInputPath(job, in);
 		FileOutputFormat.setOutputPath(job, out);
 
